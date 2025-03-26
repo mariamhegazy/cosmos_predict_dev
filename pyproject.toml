@@ -43,7 +43,7 @@ issues = "https://github.com/nvidia-cosmos/cosmos-predict1/issues"
 dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools]
-packages = ["cosmos1"]
+packages = ["cosmos_predict1"]
 
 [tool.isort]
 profile = "black"
