@@ -87,7 +87,7 @@ CUDA_HOME=$CONDA_PREFIX PYTHONPATH=$(pwd) python cosmos_predict1/diffusion/infer
     --offload_diffusion_transformer \
     --offload_text_encoder_model \
     --offload_prompt_upsampler \
-    --offload_guardrail_models
+    --offload_guardrail_models \
     --video_save_name diffusion-text2world-14b
 ```
 
