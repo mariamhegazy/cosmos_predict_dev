@@ -12,9 +12,19 @@ Cosmos-Predict1 is a key branch of Cosmos World Foundation Models (WFMs) special
 - **Post-training scripts** for helping Physical AI builders post-train pre-trained Cosmos-Predict1 for their applications.
 - **Pre-training scripts** for helping Physical AI builders train their WFMs from scratch.
 
-<!-- ------------------------------ -->
+## Example Model Behavior
 
-## Example Usage
+ [Cosmos-Predict Text2World](https://github.com/nvidia-cosmos/cosmos-predict1)
+
+<video src="https://github.com/user-attachments/assets/b001966c-5f5e-4927-a3fe-44d142dd0ab1"> Your browser does not support the video tag.</video>
+
+[Cosmos-Predict Video2World](https://github.com/nvidia-cosmos/cosmos-predict1)
+
+<video src="https://github.com/user-attachments/assets/0bbba982-c6fd-4388-a46f-bf91ce4099ad"> Your browser does not support the video tag. </video>
+
+## Getting Started
+
+We provide a comphrehensive set of examples to illustrate how to perform inference, post-training, etc, with Cosmos-Predict1. Click a relevant example below and start your Cosmos journey.
 
 ### Inference with pre-trained Cosmos-Predict1 models
 * [Inference with diffusion-based Text2World models](examples/inference_diffusion_text2world.md) **[with multi-GPU support]**
@@ -35,27 +45,6 @@ Cosmos-Predict1 is a key branch of Cosmos World Foundation Models (WFMs) special
 * [Inference with post-trained multi-view diffusion-based Text2World models)](examples/inference_diffusion_text2world_multiview.md) **[with multi-GPU support]**
 * [Inference with post-trained multi-view diffusion-based Video2World models)](examples/inference_diffusion_video2world_multiview.md) **[with multi-GPU support]**
 
-
-## Quick start
-The code snippet below provides a gist of the inference usage.
-
-```bash
-PROMPT="A sleek, humanoid robot stands in a vast warehouse filled with neatly stacked cardboard boxes on industrial shelves. The robot's metallic body gleams under the bright, even lighting, highlighting its futuristic design and intricate joints. A glowing blue light emanates from its chest, adding a touch of advanced technology. The background is dominated by rows of boxes, suggesting a highly organized storage system. The floor is lined with wooden pallets, enhancing the industrial setting. The camera remains static, capturing the robot's poised stance amidst the orderly environment, with a shallow depth of field that keeps the focus on the robot while subtly blurring the background for a cinematic effect."
-
-CUDA_HOME=$CONDA_PREFIX PYTHONPATH=$(pwd) python cosmos_predict1/diffusion/inference/text2world.py \
-    --checkpoint_dir checkpoints \
-    --diffusion_transformer_dir Cosmos-Predict1-7B-Text2World \
-    --prompt "${PROMPT}" \
-    --offload_prompt_upsampler \
-    --video_save_name diffusion-text2world-7b
-```
-
-<video src="https://github.com/user-attachments/assets/2ee7386b-8808-4db2-b38a-87ab679339f9">
-  Your browser does not support the video tag.
-</video>
-
-
-<!-- ------------------------------ -->
 
 ## Cosmos-Predict1 Models
 
