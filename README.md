@@ -2,47 +2,41 @@
     <img src="assets/nvidia-cosmos-header.png" alt="NVIDIA Cosmos Header">
 </p>
 
-### [Website](https://www.nvidia.com/en-us/ai/cosmos/) | [Hugging Face](https://huggingface.co/collections/nvidia/cosmos-predict1-67c9d1b97678dbf7669c89a7) | [Paper](https://arxiv.org/abs/2501.03575) | [Paper Website](https://research.nvidia.com/labs/dir/cosmos-predict1)
+### [Main Repo](https://www.nvidia.com/cosmos/) | [Product Website](https://www.nvidia.com/en-us/ai/cosmos/) | [Hugging Face](https://huggingface.co/collections/nvidia/cosmos-predict1-67c9d1b97678dbf7669c89a7) | [Paper](https://arxiv.org/abs/2501.03575) | [Paper Website](https://research.nvidia.com/labs/dir/cosmos-predict1)
 
-[NVIDIA Cosmos](https://www.nvidia.com/cosmos/) is a developer-first world foundation model platform designed to help Physical AI developers build their Physical AI systems better and faster. Cosmos contains
-
-1. Pre-trained models (available via Hugging Face) under the [NVIDIA Open Model License](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/) that allows commercial use of the models for free.
-2. Training scripts under the [Apache 2 License](https://www.apache.org/licenses/LICENSE-2.0) for post-training the models for various downstream Physical AI applications.
-
-<!-- ------------------------------ -->
-
-## Key Features
-
-Cosmos-Predict1 includes the following features:
+Cosmos-Predict1 is a key branch of Cosmos World Foundation Models (WFMs) specialized for future state prediction, often referred to as world models. It includes the following:
 
 - **Diffusion-based world foundation models** for Text2World and Video2World generation, where a user can generate visual simulation based on text prompts and video prompts.
 - **Autoregressive-based world foundation models** for Video2World generation, where a user can generate visual simulation based on video prompts and optional text prompts.
 - **Image and video tokenizers** for tokenizing videos into continuous tokens (latent vectors) and discrete tokens (integers) efficiently and effectively.
+- **Post-training scripts** for helping Physical AI builders post-train pre-trained Cosmos-Predict1 for their applications.
+- **Pre-training scripts** for helping Physical AI builders train their WFMs from scratch.
 
 <!-- ------------------------------ -->
 
-## Examples
+## Example Usage
 
-Inference with pre-trained models:
+### Inference with pre-trained Cosmos-Predict1 models
 * [Inference with diffusion-based Text2World models](examples/inference_diffusion_text2world.md) **[with multi-GPU support]**
 * [Inference with diffusion-based Video2World models](examples/inference_diffusion_video2world.md) **[with multi-GPU support]**
 * [Inference with autoregressive-based base models](examples/inference_autoregressive_base.md) **[with multi-GPU support]**
 * [Inference with autoregressive-based Video2World models](examples/inference_autoregressive_video2world.md) **[with multi-GPU support]**
 * [Inference with tokenizer models](examples/inference_tokenizer.md)
 
-Post-training models:
-* [Post-training diffusion-based Text2World models](examples/post-training_diffusion_text2world.md) **[with multi-GPU support]**
-* [Post-training diffusion-based Video2World models](examples/post-training_diffusion_video2world.md) **[with multi-GPU support]**
-* [Post-training diffusion-based Text2World models (with multi-view data)](examples/post-training_diffusion_text2world_multiview.md) **[with multi-GPU support]**
-* [Post-training diffusion-based Video2World models (with multi-view data)](examples/post-training_diffusion_video2world_multiview.md) **[with multi-GPU support]**
-* [Post-training autoregressive-based base models](examples/post-training_autoregressive_base.md) **[with multi-GPU support]**
-* [Post-training tokenizer models](examples/post-training_tokenizer.md) **[with multi-GPU support]**
+### Post-train pre-trained Cosmos-Predict1 models
+* [Post-train diffusion-based Text2World models using custom datasets](examples/post-training_diffusion_text2world.md) **[with multi-node support]**
+* [Post-train diffusion-based Video2World models using custom datasets](examples/post-training_diffusion_video2world.md) **[with multi-node support]**
+* [Post-train diffusion-based Text2World models using custom multi-view datasets](examples/post-training_diffusion_text2world_multiview.md) **[with multi-node support]**
+* [Post-train diffusion-based Video2World models using custom multi-view datasets)](examples/post-training_diffusion_video2world_multiview.md) **[with multi-node support]**
+* [Post-train autoregressive-based base models using custom datasets](examples/post-training_autoregressive_base.md) **[with multi-node support]**
+* [Post-train tokenizers using custom datasets](examples/post-training_tokenizer.md) **[with multi-GPU support]**
 
-Inference with post-trained models:
-* [Inference with diffusion-based Text2World models (with multi-view data)](examples/inference_diffusion_text2world_multiview.md) **[with multi-GPU support]**
-* [Inference with diffusion-based Video2World models (with multi-view data)](examples/inference_diffusion_video2world_multiview.md) **[with multi-GPU support]**
+### Inference with post-trained models:
+* [Inference with post-trained multi-view diffusion-based Text2World models)](examples/inference_diffusion_text2world_multiview.md) **[with multi-GPU support]**
+* [Inference with post-trained multi-view diffusion-based Video2World models)](examples/inference_diffusion_video2world_multiview.md) **[with multi-GPU support]**
 
 
+## Quick start
 The code snippet below provides a gist of the inference usage.
 
 ```bash
@@ -63,9 +57,9 @@ CUDA_HOME=$CONDA_PREFIX PYTHONPATH=$(pwd) python cosmos_predict1/diffusion/infer
 
 <!-- ------------------------------ -->
 
-## Model Family
+## Cosmos-Predict1 Models
 
-We provide a series of pre-trained models of different families, available for download on Hugging Face.
+Cosmos-Predict1 include the following models
 
 **Diffusion models**
 
@@ -100,4 +94,4 @@ This project will download and install additional third-party open source softwa
 
 NVIDIA Cosmos source code is released under the [Apache 2 License](https://www.apache.org/licenses/LICENSE-2.0).
 
-NVIDIA Cosmos models are released under the [NVIDIA Open Model License](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license). For a custom license, please contact [cosmos-license@nvidia.com](mailto:cosmos-license@nvidia.com).
+NVIDIA Cosmos models are released under the [NVIDIA Open Model License](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license). For a custom license (such as exemption of guardrail), please contact [cosmos-license@nvidia.com](mailto:cosmos-license@nvidia.com).
