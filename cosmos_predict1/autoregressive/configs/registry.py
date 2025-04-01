@@ -21,7 +21,6 @@ from cosmos_predict1.autoregressive.configs.base.callbacks import (
     VIDEO_TEACHER_FORCING_CALLBACK,
 )
 from cosmos_predict1.autoregressive.configs.base.dataloader import get_tealrobot_video, get_driving_videos
-from cosmos_predict1.autoregressive.configs.base.dataloader import get_tealrobot_video
 from cosmos_predict1.autoregressive.configs.base.optim import LambdaLinearLR
 from cosmos_predict1.autoregressive.configs.experiment.video2video.basic import register_experiments
 from cosmos_predict1.utils import config, log
