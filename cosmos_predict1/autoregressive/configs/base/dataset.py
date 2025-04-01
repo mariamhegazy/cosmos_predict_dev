@@ -19,6 +19,7 @@ import attrs
 
 from cosmos_predict1.utils.config import make_freezable
 
+
 @make_freezable
 @attrs.define(slots=False)
 class VideoDatasetConfig:

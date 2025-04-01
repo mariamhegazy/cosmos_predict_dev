@@ -58,7 +58,7 @@ class MultiviewGeneralDIT(GeneralDIT):
         layer_mask = [False] * self.num_blocks if kwargs["layer_mask"] is None else kwargs["layer_mask"]
         assert (
             len(layer_mask) == self.num_blocks
-        ), f"Layer mask length {len(layer_mask)} does not match num_blocks { self.num_blocks}"
+        ), f"Layer mask length {len(layer_mask)} does not match num_blocks {self.num_blocks}"
         for idx in range(self.num_blocks):
             if layer_mask[idx]:
                 continue

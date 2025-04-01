@@ -48,6 +48,7 @@ class SamplingConfig:
     logprobs: bool = False
     echo: bool = False
 
+
 @attrs.define(slots=False)
 class DiffusionDecoderSamplingConfig:
     """

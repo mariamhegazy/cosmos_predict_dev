@@ -173,8 +173,6 @@ video2world_instruction_bridge_57frames = LazyDict(  # This experiment is used t
             ),
             # Use Image VAE for training
             vae=dict(pixel_chunk_duration=57),
-            # Use context parallel size 1 for training
-            context_parallel_size=1,
             conditioner=dict(
                 video_cond_bool=dict(
                     condition_location="first_random_n",

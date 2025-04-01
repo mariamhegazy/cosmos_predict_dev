@@ -280,7 +280,7 @@ def main(args):
         allow_patterns=["README.md", "model.pt", "mean_std.pt", "config.json", "*.jit", "guardrail/*"]
     )
 
-    # Download the requested Autoregressive models
+    # Download the requested diffusion models
     for size in args.model_sizes:
         for model_type in args.model_types:
             suffix = f"-{model_type}"

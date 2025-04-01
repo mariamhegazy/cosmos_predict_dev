@@ -130,8 +130,6 @@ text2world_multiview_7b_example = LazyDict(
                 rope_t_extrapolation_ratio=2,
                 n_views=num_views,
             ),
-            # Use context parallel size 1 for training
-            context_parallel_size=1,
             vae=dict(pixel_chunk_duration=num_frames),
         ),
         model_obj=L(FSDPDiffusionModel)(

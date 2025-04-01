@@ -2,7 +2,7 @@
     <img src="assets/nvidia-cosmos-header.png" alt="NVIDIA Cosmos Header">
 </p>
 
-### [Main Repo](https://github.com/NVIDIA/Cosmos) | [Product Website](https://www.nvidia.com/en-us/ai/cosmos/) | [Hugging Face](https://huggingface.co/collections/nvidia/cosmos-predict1-67c9d1b97678dbf7669c89a7) | [Paper](https://arxiv.org/abs/2501.03575) | [Paper Website](https://research.nvidia.com/labs/dir/cosmos-predict1)
+### [Product Website](https://www.nvidia.com/en-us/ai/cosmos/) | [Hugging Face](https://huggingface.co/collections/nvidia/cosmos-predict1-67c9d1b97678dbf7669c89a7) | [Paper](https://arxiv.org/abs/2501.03575) | [Paper Website](https://research.nvidia.com/labs/dir/cosmos-predict1)
 
 Cosmos-Predict1 is a key branch of Cosmos World Foundation Models (WFMs) specialized for future state prediction, often referred to as world models. The tree main branches of Cosmos WFMs are [cosmos-predict](https://github.com/nvidia-cosmos/cosmos-predict1), [cosmos-transfer](https://github.com/nvidia-cosmos/cosmos-transfer1), and [cosmos-reason](https://github.com/nvidia-cosmos/cosmos-reason1). We visualize the architecture of Cosmos-Predict1 in the following figure.
 
@@ -23,34 +23,38 @@ Cosmos-Predict1 includes the following:
 
  [Cosmos-Predict Text2World](https://github.com/nvidia-cosmos/cosmos-predict1)
 
-<video src="https://github.com/user-attachments/assets/b001966c-5f5e-4927-a3fe-44d142dd0ab1"> Your browser does not support the video tag.</video>
+<video src="https://github.com/user-attachments/assets/8abcc5d0-0840-47ae-8f95-10fc0dae7092"> Your browser does not support the video tag.</video>
 
 [Cosmos-Predict Video2World](https://github.com/nvidia-cosmos/cosmos-predict1)
 
-<video src="https://github.com/user-attachments/assets/0bbba982-c6fd-4388-a46f-bf91ce4099ad"> Your browser does not support the video tag. </video>
+<video src="https://github.com/user-attachments/assets/d598af27-55de-4bc9-b68e-24b70876be9f"> Your browser does not support the video tag. </video>
 
 ## Getting Started
 
 We provide a comphrehensive set of examples to illustrate how to perform inference, post-training, etc, with Cosmos-Predict1. Click a relevant example below and start your Cosmos journey.
 
+### Installation
+
+Please refer to [INSTALL.md](INSTALL.md) for general instructions on environment setup.
+
 ### Inference with pre-trained Cosmos-Predict1 models
-* [Inference with diffusion-based Text2World models](examples/inference_diffusion_text2world.md) **[with multi-GPU support]**
-* [Inference with diffusion-based Video2World models](examples/inference_diffusion_video2world.md) **[with multi-GPU support]**
-* [Inference with autoregressive-based base models](examples/inference_autoregressive_base.md) **[with multi-GPU support]**
-* [Inference with autoregressive-based Video2World models](examples/inference_autoregressive_video2world.md) **[with multi-GPU support]**
-* [Inference with tokenizer models](examples/inference_tokenizer.md)
+* [Inference with diffusion-based Text2World models](/examples/inference_diffusion_text2world.md) **[with multi-GPU support]**
+* [Inference with diffusion-based Video2World models](/examples/inference_diffusion_video2world.md) **[with multi-GPU support]**
+* [Inference with autoregressive-based base models](/examples/inference_autoregressive_base.md) **[with multi-GPU support]**
+* [Inference with autoregressive-based Video2World models](/examples/inference_autoregressive_video2world.md) **[with multi-GPU support]**
+* [Inference with tokenizer models](/examples/inference_tokenizer.md)
 
 ### Post-train pre-trained Cosmos-Predict1 models
-* [Post-train diffusion-based Text2World models using custom datasets](examples/post-training_diffusion_text2world.md) **[with multi-node support]**
-* [Post-train diffusion-based Video2World models using custom datasets](examples/post-training_diffusion_video2world.md) **[with multi-node support]**
-* [Post-train diffusion-based Text2World models using custom multi-view datasets](examples/post-training_diffusion_text2world_multiview.md) **[with multi-node support]**
-* [Post-train diffusion-based Video2World models using custom multi-view datasets)](examples/post-training_diffusion_video2world_multiview.md) **[with multi-node support]**
-* [Post-train autoregressive-based base models using custom datasets](examples/post-training_autoregressive_base.md) **[with multi-node support]**
-* [Post-train tokenizers using custom datasets](examples/post-training_tokenizer.md) **[with multi-GPU support]**
+* [Post-train diffusion-based Text2World models using custom datasets](/examples/post-training_diffusion_text2world.md) **[with multi-node support]**
+* [Post-train diffusion-based Video2World models using custom datasets](/examples/post-training_diffusion_video2world.md) **[with multi-node support]**
+* [Post-train diffusion-based Text2World models using custom multi-view datasets](/examples/post-training_diffusion_text2world_multiview.md) **[with multi-node support]**
+* [Post-train diffusion-based Video2World models using custom multi-view datasets)](/examples/post-training_diffusion_video2world_multiview.md) **[with multi-node support]**
+* [Post-train autoregressive-based base models using custom datasets](/examples/post-training_autoregressive_base.md) **[with multi-node support]**
+* [Post-train tokenizers using custom datasets](/examples/post-training_tokenizer.md) **[with multi-node support]**
 
 ### Inference with post-trained models:
-* [Inference with post-trained multi-view diffusion-based Text2World models)](examples/inference_diffusion_text2world_multiview.md) **[with multi-GPU support]**
-* [Inference with post-trained multi-view diffusion-based Video2World models)](examples/inference_diffusion_video2world_multiview.md) **[with multi-GPU support]**
+* [Inference with post-trained multi-view diffusion-based Text2World models)](/examples/inference_diffusion_text2world_multiview.md) **[with multi-GPU support]**
+* [Inference with post-trained multi-view diffusion-based Video2World models)](/examples/inference_diffusion_video2world_multiview.md) **[with multi-GPU support]**
 
 
 ## Cosmos-Predict1 Models

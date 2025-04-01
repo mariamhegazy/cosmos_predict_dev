@@ -154,8 +154,6 @@ video2world_7b_example_hdvila = LazyDict(
                 rope_t_extrapolation_ratio=2,
             ),
             adjust_video_noise=True,
-            # context_parallel_size=8,
-            context_parallel_size=1,  # check if this is correct
             conditioner=dict(
                 video_cond_bool=dict(
                     condition_location="first_random_n",

@@ -71,8 +71,6 @@ class DefaultModelConfig:
     use_dummy_temporal_dim: bool = False  # Whether to use dummy temporal dimension in data
     adjust_video_noise: bool = False  # whether or not adjust video noise accroding to the video length
 
-    context_parallel_size: int = 1  # to be removed in future. Kept to support current FSDP1 + CP implementation.
-
 
 @attrs.define(slots=False)
 class MultiviewModelConfig(DefaultModelConfig):

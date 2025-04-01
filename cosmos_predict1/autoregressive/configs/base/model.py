@@ -123,6 +123,7 @@ class ModelConfig:
     def __getitem__(self, item):
         return getattr(self, item)
 
+
 @attrs.define
 class TrainingModelConfig:
     """

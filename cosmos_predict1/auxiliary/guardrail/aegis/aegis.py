@@ -45,15 +45,14 @@ class Aegis(ContentSafetyGuardrail):
 
     def get_moderation_prompt(self, user_prompt: str) -> str:
         """Create the moderation prompt for the Aegis model."""
-        full_prompt = f"""[INST] Task: Check if there is unsafe content in 'User' messages in conversations according our safety policy with the below categories.
-
-        <BEGIN UNSAFE CONTENT CATEGORIES>
-        {"".join([f"{category['instruction']}" for category in UNSAFE_CATEGORIES])}
-        <END UNSAFE CONTENT CATEGORIES>
-
-        <BEGIN CONVERSATION>
-
-        """
+        unsafe_categories = "".join([f"{category['instruction']}" for category in UNSAFE_CATEGORIES])
+        full_prompt = (
+            "[INST] Task: Check if there is unsafe content in 'User' messages in conversations according our safety policy with the below categories.\n"
+            "<BEGIN UNSAFE CONTENT CATEGORIES>\n"
+            f"{unsafe_categories}\n"
+            "<END UNSAFE CONTENT CATEGORIES>\n"
+            "<BEGIN CONVERSATION>\n"
+        )
         full_prompt += f"User: {user_prompt}\n\n"
         full_prompt += """<END CONVERSATION>
 

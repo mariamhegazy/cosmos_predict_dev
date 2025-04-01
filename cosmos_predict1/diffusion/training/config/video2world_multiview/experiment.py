@@ -133,8 +133,6 @@ video2world_multiview_7b_example = LazyDict(
                 rope_t_extrapolation_ratio=2,
                 n_views=num_views,
             ),
-            # Use context parallel size 1 for training
-            context_parallel_size=1,
             conditioner=dict(
                 video_cond_bool=dict(
                     condition_location="first_random_n",

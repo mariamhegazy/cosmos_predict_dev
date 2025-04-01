@@ -202,6 +202,7 @@ class Attention(nn.Module):
             raise ValueError(f"Normalization mode {self.qkv_norm_mode} not found, only support 'per_head'")
 
         self.backend = backend
+        self.tp_size = 1  # TP is not included in this Attention implementation.
 
         self.to_q = nn.Sequential(
             nn.Linear(query_dim, inner_dim, bias=qkv_bias),
@@ -231,7 +232,7 @@ class Attention(nn.Module):
                 attention_dropout=0,
                 qkv_format=qkv_format,
                 attn_mask_type="no_mask",
-                tp_size=1,
+                tp_size=self.tp_size,
                 tp_group=None,
                 sequence_parallel=False,
             )

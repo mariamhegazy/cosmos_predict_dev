@@ -133,11 +133,12 @@ text2world_7b_example_hdvila = LazyDict(
                 ),
                 progress_bar=L(ProgressBarCallback)(),
             ),
+            grad_accum_iter=2,
         ),
         model_parallel=dict(
             sequence_parallel=False,
             tensor_model_parallel_size=1,
-            context_parallel_size=1,
+            context_parallel_size=8,
         ),
         model=dict(
             # Use 16x16x32x40 latent shape for training
@@ -148,13 +149,14 @@ text2world_7b_example_hdvila = LazyDict(
                 160,  # Latent width dim
             ],
             loss_reduce="mean",
+            loss_scale=10.0,
             ema=dict(
                 enabled=True,
             ),
             fsdp_enabled=True,
             fsdp=dict(
                 policy="block",
-                checkpoint=True,
+                checkpoint=False,
                 min_num_params=1024,
                 sharding_group_size=32,
                 sharding_strategy="hybrid",
@@ -167,8 +169,6 @@ text2world_7b_example_hdvila = LazyDict(
                 rope_w_extrapolation_ratio=1,
                 rope_t_extrapolation_ratio=2,
             ),
-            # Use context parallel size 1 for training
-            context_parallel_size=1,
             vae=dict(pixel_chunk_duration=num_frames),
         ),
         model_obj=L(FSDPDiffusionModel)(
@@ -188,6 +188,112 @@ text2world_7b_example_hdvila = LazyDict(
     )
 )
 
+
+text2world_14b_example_hdvila = LazyDict(
+    dict(
+        defaults=[
+            {"override /net": "faditv2_14b"},
+            {"override /ckpt_klass": "fsdp"},
+            {"override /checkpoint": "local"},
+            {"override /vae": "cosmos_diffusion_tokenizer_comp8x8x8"},
+            {"override /conditioner": "add_fps_image_size_padding_mask"},
+            "_self_",
+        ],
+        job=dict(
+            project="posttraining",
+            group="diffusion_text2world",
+            name="text2world_14b_example_hdvila",
+        ),
+        optimizer=dict(
+            lr=2 ** (-16),
+            weight_decay=0.2,
+            betas=[0.9, 0.99],
+            eps=1e-11,
+        ),
+        checkpoint=dict(
+            save_iter=200,
+            broadcast_via_filesystem=False,
+            load_path="checkpoints/Cosmos-Predict1-14B-Text2World/model.pt",
+            load_training_state=False,
+            strict_resume=False,
+            keys_not_to_resume=[],
+        ),
+        trainer=dict(
+            max_iter=2000,
+            distributed_parallelism="fsdp",
+            logging_iter=200,
+            callbacks=dict(
+                grad_clip=L(GradClip)(
+                    model_key="model",
+                    fsdp_enabled=True,
+                ),
+                low_prec=L(LowPrecisionCallback)(config=PLACEHOLDER, trainer=PLACEHOLDER, update_iter=1),
+                iter_speed=L(IterSpeed)(
+                    every_n=10,
+                    hit_thres=0,
+                ),
+                progress_bar=L(ProgressBarCallback)(),
+            ),
+        ),
+        model_parallel=dict(
+            sequence_parallel=False,
+            tensor_model_parallel_size=1,
+            context_parallel_size=8,
+        ),
+        model=dict(
+            # Use 16x16x32x40 latent shape for training
+            latent_shape=[
+                16,  # Latent channel dim
+                16,  # Latent temporal dim
+                88,  # Latent height dim
+                160,  # Latent width dim
+            ],
+            loss_reduce="mean",
+            loss_scale=10.0,
+            ema=dict(
+                enabled=True,
+                num=1,
+            ),
+            fsdp_enabled=True,
+            fsdp=dict(
+                policy="block",
+                checkpoint=False,
+                min_num_params=1024,
+                sharding_group_size=64,
+                sharding_strategy="hybrid",
+            ),
+            net=dict(
+                in_channels=16,
+                extra_per_block_abs_pos_emb=True,
+                rope_h_extrapolation_ratio=2.0,
+                rope_t_extrapolation_ratio=2.0,
+                rope_w_extrapolation_ratio=2.0,
+                extra_h_extrapolation_ratio=2.0,
+                extra_t_extrapolation_ratio=2.0,
+                extra_w_extrapolation_ratio=2.0,
+                use_memory_save=True,
+                extra_per_block_abs_pos_emb_type="learnable",
+            ),
+            adjust_video_noise=True,
+            vae=dict(pixel_chunk_duration=num_frames),
+            conditioner=dict(text=dict(dropout_rate=0.0)),
+        ),
+        model_obj=L(FSDPDiffusionModel)(
+            config=PLACEHOLDER,
+            fsdp_checkpointer=PLACEHOLDER,
+        ),
+        # warming up for first 2500 steps~(when resume from 310000)
+        scheduler=dict(
+            warm_up_steps=[2500],
+            cycle_lengths=[90_000],
+            f_start=[1.0e-6],
+            f_max=[1.0],
+            f_min=[1e-1],
+        ),
+        dataloader_train=dataloader_train_hdvila,
+        dataloader_val=dataloader_val_hdvila,
+    )
+)
 
 text2world_7b_example_cosmos_nemo_assets = LazyDict(
     dict(
@@ -268,8 +374,6 @@ text2world_7b_example_cosmos_nemo_assets = LazyDict(
                 rope_w_extrapolation_ratio=1,
                 rope_t_extrapolation_ratio=2,
             ),
-            # Use context parallel size 1 for training
-            context_parallel_size=1,
             vae=dict(pixel_chunk_duration=num_frames),
         ),
         model_obj=L(FSDPDiffusionModel)(
@@ -290,11 +394,120 @@ text2world_7b_example_cosmos_nemo_assets = LazyDict(
 )
 
 
+text2world_14b_example_cosmos_nemo_assets = LazyDict(
+    dict(
+        defaults=[
+            {"override /net": "faditv2_14b"},
+            {"override /ckpt_klass": "fsdp"},
+            {"override /checkpoint": "local"},
+            {"override /vae": "cosmos_diffusion_tokenizer_comp8x8x8"},
+            {"override /conditioner": "add_fps_image_size_padding_mask"},
+            "_self_",
+        ],
+        job=dict(
+            project="posttraining",
+            group="diffusion_text2world",
+            name="text2world_14b_example_cosmos_nemo_assets",
+        ),
+        optimizer=dict(
+            lr=2 ** (-16),
+            weight_decay=0.2,
+            betas=[0.9, 0.99],
+            eps=1e-11,
+        ),
+        checkpoint=dict(
+            save_iter=200,
+            broadcast_via_filesystem=False,
+            load_path="checkpoints/Cosmos-Predict1-14B-Text2World/model.pt",
+            load_training_state=False,
+            strict_resume=False,
+            keys_not_to_resume=[],
+        ),
+        trainer=dict(
+            max_iter=2000,
+            distributed_parallelism="fsdp",
+            logging_iter=200,
+            callbacks=dict(
+                grad_clip=L(GradClip)(
+                    model_key="model",
+                    fsdp_enabled=True,
+                ),
+                low_prec=L(LowPrecisionCallback)(config=PLACEHOLDER, trainer=PLACEHOLDER, update_iter=1),
+                iter_speed=L(IterSpeed)(
+                    every_n=10,
+                    hit_thres=0,
+                ),
+                progress_bar=L(ProgressBarCallback)(),
+            ),
+        ),
+        model_parallel=dict(
+            sequence_parallel=False,
+            tensor_model_parallel_size=1,
+            context_parallel_size=8,
+        ),
+        model=dict(
+            # Use 16x16x32x40 latent shape for training
+            latent_shape=[
+                16,  # Latent channel dim
+                16,  # Latent temporal dim
+                88,  # Latent height dim
+                160,  # Latent width dim
+            ],
+            loss_reduce="mean",
+            loss_scale=10.0,
+            ema=dict(
+                enabled=True,
+                num=1,
+            ),
+            fsdp_enabled=True,
+            fsdp=dict(
+                policy="block",
+                checkpoint=False,
+                min_num_params=1024,
+                sharding_group_size=64,
+                sharding_strategy="hybrid",
+            ),
+            net=dict(
+                in_channels=16,
+                extra_per_block_abs_pos_emb=True,
+                rope_h_extrapolation_ratio=2.0,
+                rope_t_extrapolation_ratio=2.0,
+                rope_w_extrapolation_ratio=2.0,
+                extra_h_extrapolation_ratio=2.0,
+                extra_t_extrapolation_ratio=2.0,
+                extra_w_extrapolation_ratio=2.0,
+                use_memory_save=True,
+                extra_per_block_abs_pos_emb_type="learnable",
+            ),
+            adjust_video_noise=True,
+            vae=dict(pixel_chunk_duration=num_frames),
+            conditioner=dict(text=dict(dropout_rate=0.0)),
+        ),
+        model_obj=L(FSDPDiffusionModel)(
+            config=PLACEHOLDER,
+            fsdp_checkpointer=PLACEHOLDER,
+        ),
+        # warming up for first 2500 steps~(when resume from 310000)
+        scheduler=dict(
+            warm_up_steps=[2500],
+            cycle_lengths=[90_000],
+            f_start=[1.0e-6],
+            f_max=[1.0],
+            f_min=[1e-1],
+        ),
+        dataloader_train=dataloader_train_cosmos_nemo_assets,
+        dataloader_val=dataloader_val_cosmos_nemo_assets,
+    )
+)
+
+
 def register_experiments(cs):
     # Register the experiments
     for _item in [
         text2world_7b_example_hdvila,
+        text2world_14b_example_hdvila,
         text2world_7b_example_cosmos_nemo_assets,
+        text2world_14b_example_cosmos_nemo_assets,
     ]:
         experiment_name = _item["job"]["name"]
         log.info(f"Registering experiment: {experiment_name}")

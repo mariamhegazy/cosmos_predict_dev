@@ -112,7 +112,7 @@ class AutoRegressiveTrainingModel(Model):
             log.critical("Vision encoder parameters are frozen.")
 
         num_params = self.get_num_params()
-        log.info(f"Number of model parameters: {round(num_params/1e9, 3)}B")
+        log.info(f"Number of model parameters: {round(num_params / 1e9, 3)}B")
 
     def get_num_params(
         self,

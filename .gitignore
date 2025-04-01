@@ -17,6 +17,8 @@
 outputs/
 checkpoints/*
 !checkpoints/README.md
+datasets/*
+!datasets/README.md
 
 # Data types
 *.jit
@@ -32,6 +34,8 @@ checkpoints/*
 *.pkl
 *.pt
 *.bin
+*.pickle
+*.txt
 
 # Other uncheckable file types
 *.zip

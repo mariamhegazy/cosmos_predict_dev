@@ -12,37 +12,7 @@ We support the following Cosmos Diffusion models for post-training. Review the a
 
 ### Environment setup
 
-Clone the `cosmos-predict1` source code
-```bash
-git clone https://github.com/nvidia-cosmos/cosmos-predict1.git
-cd cosmos-predict1
-```
-
-Cosmos runs only on Linux systems. We have tested the installation with Ubuntu 24.04, 22.04, and 20.04.
-Cosmos requires the Python version to be `3.10.x`. Please also make sure you have `conda` installed ([instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)).
-
-```bash
-# Create the cosmos-predict1 conda environment.
-conda env create --file cosmos-predict1.yaml
-# Activate the cosmos-predict1 conda environment.
-conda activate cosmos-predict1
-# Install the dependencies.
-pip install -r requirements.txt
-# Patch Transformer engine linking issues in conda environments.
-ln -sf $CONDA_PREFIX/lib/python3.10/site-packages/nvidia/*/include/* $CONDA_PREFIX/include/
-ln -sf $CONDA_PREFIX/lib/python3.10/site-packages/nvidia/*/include/* $CONDA_PREFIX/include/python3.10
-# Install Transformer engine.
-pip install transformer-engine[pytorch]==1.12.0
-# Install Apex for full training with bfloat16.
-git clone https://github.com/NVIDIA/apex
-cd apex
-CUDA_HOME=$CONDA_PREFIX pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" .
-```
-
-You can test the environment setup with
-```bash
-CUDA_HOME=$CONDA_PREFIX PYTHONPATH=$(pwd) python scripts/test_environment.py
-```
+Please refer to the Post-training section of [INSTALL.md](/INSTALL.md#post-training) for instructions on environment setup.
 
 ### Download checkpoints
 
@@ -168,7 +138,7 @@ checkpoints/posttraining/diffusion_text2world/text2world_7b_example_cosmos_nemo_
 
 ### Inference with the Post-trained Model Checkpoint
 
-The inference can be done with the same interface as described in [examples/inference_diffusion_text2world.md](inference_diffusion_text2world.md).
+The inference can be done with the same interface as described in [examples/inference_diffusion_text2world.md](/examples/inference_diffusion_text2world.md).
 
 #### 1. Copying checkpoint to Designated Location
 

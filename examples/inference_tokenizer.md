@@ -2,34 +2,7 @@
 
 ### Environment setup
 
-Clone the `cosmos-predict1` source code
-```bash
-git clone https://github.com/nvidia-cosmos/cosmos-predict1.git
-cd cosmos-predict1
-```
-
-Cosmos runs only on Linux systems. We have tested the installation with Ubuntu 24.04, 22.04, and 20.04.
-Cosmos requires the Python version to be `3.10.x`. Please also make sure you have `conda` installed ([instructions](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html)).
-
-```bash
-# Create the cosmos-predict1 conda environment.
-conda env create --file cosmos-predict1.yaml
-# Activate the cosmos-predict1 conda environment.
-conda activate cosmos-predict1
-# Set the PYTHONPATH for the project
-export PYTHONPATH=$(pwd)
-
-# Install the dependencies.
-pip install -r requirements.txt
-# Patch Transformer engine linking issues in conda environments.
-ln -sf $CONDA_PREFIX/lib/python3.10/site-packages/nvidia/*/include/* $CONDA_PREFIX/include/
-ln -sf $CONDA_PREFIX/lib/python3.10/site-packages/nvidia/*/include/* $CONDA_PREFIX/include/python3.10
-```
-
-Finally, you can test the environment setup with
-```bash
-python3 -m scripts.test_environment
-```
+Please refer to the Inference section of [INSTALL.md](/INSTALL.md#inference) for instructions on environment setup.
 
 ### Download checkpoints
 

@@ -53,7 +53,7 @@ class SDXLTimestepEmbedding(nn.Module):
     def __init__(self, in_features: int, out_features: int, use_adaln_lora: bool = False):
         super().__init__()
         log.critical(
-            f"Using AdaLN LoRA Flag:  {use_adaln_lora}. We enable bias if no AdaLN LoRA for backward compatibility."
+            f"Using AdaLN LoRA Flag: {use_adaln_lora}. We enable bias if no AdaLN LoRA for backward compatibility."
         )
         self.linear_1 = nn.Linear(in_features, out_features, bias=not use_adaln_lora)
         self.activation = nn.SiLU()

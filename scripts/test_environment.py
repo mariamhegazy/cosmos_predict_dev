@@ -13,9 +13,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import argparse
 import importlib
 import os
 import sys
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--training",
+        action="store_true",
+        help="Whether to check training-specific dependencies",
+    )
+    return parser.parse_args()
+
+
+def check_packages(package_list):
+    global all_success
+    for package in package_list:
+        try:
+            _ = importlib.import_module(package)
+        except Exception as e:
+            print(f"\033[91m[ERROR]\033[0m Package not successfully imported: \033[93m{package}\033[0m")
+            all_success = False
+        else:
+            print(f"\033[92m[SUCCESS]\033[0m {package} found")
+
+
+args = parse_args()
 
 if not (sys.version_info.major == 3 and sys.version_info.minor >= 10):
     detected = f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
@@ -34,28 +60,16 @@ packages = [
     "transformers",
     "megatron.core",
     "transformer_engine",
+]
+packages_training = [
     "apex.multi_tensor_apply",
 ]
 all_success = True
-te_success = True
 
-for package in packages:
-    try:
-        _ = importlib.import_module(package)
-    except Exception as e:
-        print(f"\033[91m[ERROR]\033[0m Package not successfully imported: \033[93m{package}\033[0m")
-        if package == "transformer_engine":
-            te_success = False
-        else:
-            all_success = False
-    else:
-        print(f"\033[92m[SUCCESS]\033[0m {package} found")
+check_packages(packages)
+if args.training:
+    check_packages(packages_training)
 
 if all_success:
     print("-----------------------------------------------------------")
-    if not te_success:
-        print(
-            "\033[93m[WARNING]\033[0m Cosmos environment setup is successful (\033[93mtransformer-engine\033[0m is not available)."
-        )
-    else:
-        print("\033[92m[SUCCESS]\033[0m Cosmos environment setup is successful!")
+    print("\033[92m[SUCCESS]\033[0m Cosmos environment setup is successful!")

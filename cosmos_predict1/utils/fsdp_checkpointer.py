@@ -86,7 +86,7 @@ class FSDPCheckpointer:
             default_checkpoint_path = checkpoint_path.replace(".pt", f"_{tag}_model.pt")
             if not os.path.exists(default_checkpoint_path):
                 default_checkpoint_path = checkpoint_path  # starting from the release checkpoint
-                log.warning(f"{is_ema} model is not found. Loading from {default_checkpoint_path}")
+                log.warning(f"is_ema={is_ema} model is not found. Loading from {default_checkpoint_path}")
             if tag == "ema" and ema_id > 0:
                 _checkpoint_path = checkpoint_path.replace(".pt", f"_RANK{ema_id}.pt")
                 _checkpoint_path = _checkpoint_path.replace(".pt", f"_{tag}_model.pt")
@@ -113,7 +113,7 @@ class FSDPCheckpointer:
                 log.info(non_strict_load_model(model, state_dict))
             log.info("-finish model loading")
         else:
-            log.info(f"{is_ema} model is not founded and loaded.")
+            log.info(f"is_ema={is_ema} model is not found and loaded.")
 
     @misc.timer("FSDP.load_optim_scheduler_during_init")
     def load_optim_scheduler_during_init(self, fsdp_model, optimizer, scheduler):

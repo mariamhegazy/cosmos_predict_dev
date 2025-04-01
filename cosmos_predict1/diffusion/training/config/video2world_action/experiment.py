@@ -171,9 +171,6 @@ video2world_action_bridge_2frames = LazyDict(  # This experiment is used to veri
                 rope_w_extrapolation_ratio=1,
                 rope_t_extrapolation_ratio=2,
             ),
-            # Use context parallel size 1 for training
-            context_parallel_size=1,
-            # context_parallel_size=8,
             conditioner=dict(
                 video_cond_bool=dict(
                     condition_location="first_random_n",
