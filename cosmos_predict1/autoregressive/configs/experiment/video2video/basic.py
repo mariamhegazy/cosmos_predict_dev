@@ -123,7 +123,7 @@ base_4b_example_tealrobot_tp4: LazyDict = LazyDict(
             num_video_frames=33,
             video_height=640,
             video_width=848,
-            tokenizer_ckpt_path="checkpoints/Cosmos-Tokenize1-DV8x16x16-720p/ema.jit",
+            tokenizer_ckpt_path="/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-DV8x16x16-720p/ema.jit",
             add_special_tokens=False,
         ),
         trainer=dict(
@@ -139,10 +139,68 @@ base_4b_example_tealrobot_tp4: LazyDict = LazyDict(
             ),
         ),
         checkpoint=dict(
-            load_path="checkpoints/Cosmos-Predict1-4B/model.pt",
+            load_path="/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Predict1-4B/model.pt",
             load_training_state=False,
             strict_resume=False,
-            save_iter=10
+            save_iter=100
+        ),
+        model_parallel=create_model_parallel_config(),
+    ),
+)
+
+base_4b_driving_tp4: LazyDict = LazyDict(
+    dict(
+        defaults=[
+            {"override /data_train": "driving_videos"},
+            {
+                "override /callbacks": [
+                    "basic",
+                    "video_teacher_forcing",
+                ]
+            },
+            {"override /checkpoint": "local"},
+            {"override /optimizer": "fused_adamw"},
+            {"override /scheduler": "warmup_cosine_lr"},
+            "_self_",
+        ],
+        job=dict(
+            project="posttraining",
+            group="autoregressive_base",
+            name="base_4b_driving_tp4",
+        ),
+        model=create_video2world_model(
+            model_size="4b",
+            model_family="cosmos",
+            backend="pytorch",
+            tensor_model_parallel_size=4,
+            batch_size=1,
+            pixel_chunk_duration=49,
+            num_video_frames=49,
+            # video_height=640,
+            # video_width=848,
+            video_height=576,
+            video_width=1024,
+            tokenizer_ckpt_path="/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-DV8x16x16-720p/ema.jit",
+            add_special_tokens=False,
+        ),
+        trainer=dict(
+            # max_iter=50000,
+            max_iter=10000000,
+            grad_accum_iter=1,
+            grad_scaler_args=dict(enabled=False),
+            run_validation=False,  # No need for validation as epoch <= 1
+            distributed_parallelism="ddp",
+            callbacks=dict(
+                vid_sampling_tf=dict(
+                    every_n=1000,
+                ),
+            ),
+        ),
+        checkpoint=dict(
+            load_path="/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Predict1-4B/model.pt",
+            load_training_state=False,
+            strict_resume=False,
+            save_iter=2000,
         ),
         model_parallel=create_model_parallel_config(),
     ),
@@ -154,6 +212,7 @@ def register_experiments(cs):
     for _item in [
         base_4b_example_tealrobotsmall_tp1,
         base_4b_example_tealrobot_tp4,
+        base_4b_driving_tp4
     ]:
         cs.store(
             group="experiment",

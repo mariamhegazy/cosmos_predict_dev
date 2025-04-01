@@ -114,7 +114,7 @@ def main(args):
         else:
             out_vid_path = os.path.join(args.video_save_folder, f"{idx}.mp4")
 
-        imageio.mimsave(out_vid_path, out_vid, fps=25)
+        imageio.mimsave(out_vid_path, out_vid, fps=10)
         log.info(f"Saved video to {out_vid_path}")
 
     # clean up properly

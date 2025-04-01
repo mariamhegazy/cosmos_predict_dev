@@ -36,3 +36,22 @@ class VideoDatasetConfig:
     num_frames: int = 33
     video_size: list[int, int] = [640, 848]
     start_frame_interval: int = 1
+
+
+@make_freezable
+@attrs.define(slots=False)
+class H5DatasetConfig:
+    """
+    Args:
+        dataset_dir (str): Base path to the dataset directory
+        sequence_interval (int): Interval between sampled frames in a sequence
+        num_frames (int): Number of frames to load per sequence
+        video_size (list): Target size [H,W] for video frames
+        start_frame_interval (int): Interval between starting frames of sequences
+    """
+
+    dataset_dir: str = "datasets/cosmos_nemo_assets/videos/"
+    sequence_interval: int = 1
+    num_frames: int = 49
+    video_size: list[int, int] = [640, 848]
+    start_frame_interval: int = 20

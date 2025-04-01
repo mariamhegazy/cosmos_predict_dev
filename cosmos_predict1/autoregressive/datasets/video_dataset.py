@@ -35,7 +35,7 @@ from cosmos_predict1.autoregressive.datasets.dataset_utils import (
     Normalize,
     ResizeSmallestSideAspectPreserving,
 )
-
+import pickle
 
 class VideoDataset(Dataset):
     def __init__(self, config: VideoDatasetConfig):
@@ -48,13 +48,40 @@ class VideoDataset(Dataset):
         self.sequence_length = config.num_frames
         self.video_size = config.video_size
         self.start_frame_interval = config.start_frame_interval
+        self.cache_file = os.path.join(self.dataset_dir, "video_samples.pkl")
 
         self.video_dir = self.dataset_dir
-        self.video_paths = [os.path.join(self.video_dir, f) for f in os.listdir(self.video_dir) if f.endswith(".mp4")]
-        print(f"{len(self.video_paths)} videos in total")
-
+        # self.video_paths = [os.path.join(self.video_dir, f) for f in os.listdir(self.video_dir) if f.endswith(".mp4")]
+        # self.video_paths = [os.path.join(self.video_dir, f) for f in os.listdir(self.video_dir) if f.endswith((".mp4", ".webm"))]
+        self.video_paths = [
+            os.path.join(root, f)
+            for root, _, files in os.walk(self.video_dir)
+            for f in files
+            if f.endswith((".mp4", ".webm"))
+        ]
+        self.video_paths = self.video_paths[:10]
         self.samples = self._init_samples(self.video_paths)
         self.samples = sorted(self.samples, key=lambda x: (x["video_path"], x["frame_ids"][0]))
+
+        # # Limit to 1000 videos
+        # self.video_paths = self.video_paths[:1000]
+        # print(f"Using first {len(self.video_paths)} videos out of total available")
+
+        # # Load cache if available
+        # if os.path.exists(self.cache_file):
+        #     print(f"Loading cached samples from {self.cache_file}")
+        #     with open(self.cache_file, "rb") as f:
+        #         self.samples = pickle.load(f)
+
+        # else:
+        #     print("Generating samples from video files...")
+        #     self.samples = self._init_samples(self.video_paths)  # Already capped at 1000
+        #     self.samples = sorted(self.samples, key=lambda x: (x["video_path"], x["frame_ids"][0]))
+
+        #     with open(self.cache_file, "wb") as f:
+        #         pickle.dump(self.samples, f)
+        #         print(f"Final cache saved to {self.cache_file}")
+
         print(f"{len(self.samples)} samples in total")
         self.wrong_number = 0
 
@@ -76,13 +103,57 @@ class VideoDataset(Dataset):
 
     def _init_samples(self, video_paths):
         samples = []
-        with ThreadPoolExecutor(32) as executor:
+        with ThreadPoolExecutor(200) as executor:
             future_to_video_path = {
                 executor.submit(self._load_and_process_video_path, video_path): video_path for video_path in video_paths
             }
             for future in tqdm(as_completed(future_to_video_path), total=len(video_paths)):
                 samples.extend(future.result())
         return samples
+
+    # def _init_samples(self, video_paths, tmp_cache_file="video_samples_tmp.pkl", checkpoint_every=50):
+    #         samples = []
+    #         processed_paths = set()
+
+    #         # Load existing partial cache if it exists
+    #         if os.path.exists(tmp_cache_file):
+    #             with open(tmp_cache_file, "rb") as f:
+    #                 samples = pickle.load(f)
+    #             processed_paths = {s["video_path"] for s in samples}
+    #             print(f"🔁 Loaded {len(samples)} samples from checkpoint. Resuming...")
+
+    #         remaining_paths = [vp for vp in video_paths if vp not in processed_paths]
+    #         print(f"Processing {len(remaining_paths)} remaining videos")
+
+    #         completed = 0
+    #         lock = torch.multiprocessing.Lock()  # to make checkpointing thread-safe
+
+    #         with ThreadPoolExecutor(max_workers=32) as executor:  # use fewer workers than 200
+    #             future_to_path = {
+    #                 executor.submit(self._load_and_process_video_path, vp): vp
+    #                 for vp in remaining_paths
+    #             }
+
+    #             for future in tqdm(as_completed(future_to_path), total=len(future_to_path)):
+    #                 video_path = future_to_path[future]
+    #                 try:
+    #                     result = future.result()
+    #                     samples.extend(result)
+    #                     processed_paths.add(video_path)
+    #                     completed += 1
+
+    #                     # Save checkpoint every N videos
+    #                     if completed % checkpoint_every == 0:
+    #                         with lock:
+    #                             with open(tmp_cache_file, "wb") as f:
+    #                                 pickle.dump(samples, f)
+    #                         print(f"Saved checkpoint with {len(samples)} samples after {completed} videos")
+
+    #                 except Exception as e:
+    #                     print(f"Error processing {video_path}: {e}")
+
+    #         return samples
+
 
     def _load_and_process_video_path(self, video_path):
         vr = VideoReader(video_path, ctx=cpu(0), num_threads=2)
@@ -113,7 +184,7 @@ class VideoDataset(Dataset):
         return len(self.samples)
 
     def _load_video(self, video_path, frame_ids):
-        vr = VideoReader(video_path, ctx=cpu(0), num_threads=2)
+        vr = VideoReader(video_path, ctx=cpu(0), num_threads=1)
         assert (np.array(frame_ids) < len(vr)).all(), "Some frame_ids are out of range."
         assert (np.array(frame_ids) >= 0).all(), "Some frame_ids are negative."
         vr.seek(0)
@@ -159,6 +230,8 @@ class VideoDataset(Dataset):
 
             data["video"] = data["video"].permute(1, 0, 2, 3)  # Rearrange from [T, C, H, W] to [C, T, H, W]
 
+            print(f"Video: {video_path}, video shape: {data['video'].shape}, ")
+
             return data
         except Exception:
             warnings.warn(
@@ -173,7 +246,7 @@ class VideoDataset(Dataset):
 
 
 if __name__ == "__main__":
-    config = VideoDatasetConfig(dataset_dir="datasets/cosmos_nemo_assets/videos/")
+    config = VideoDatasetConfig(dataset_dir="/capstor/store/cscs/swissai/a03/datasets/OpenDV-YouTube/videos/")
     dataset = VideoDataset(config)
 
     indices = [0, 1, 2, -1]

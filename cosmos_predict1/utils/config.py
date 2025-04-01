@@ -270,6 +270,7 @@ class TrainerConfig:
     grad_scaler_args: dict = attrs.field(factory=lambda: dict(enabled=False))
     # Maximum number of iterations to train the model.
     max_iter: int = 999999999
+
     # Maximum number of iterations to validate the model. If None, validate on the entire dataset.
     max_val_iter: int | None = None
     # How often we log the training stats.

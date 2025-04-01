@@ -87,10 +87,12 @@ class Trainer(Trainer):
         else:
             raise ValueError(f"Unknown distributed parallelism mode: {self.config.trainer.distributed_parallelism}")
         log.info("Starting training...")
+       
         self.callbacks.on_train_start(model, iteration=iteration)
         # Initial validation.
         if self.config.trainer.run_validation and iteration == 0:
             self.validate(model, dataloader_val, iteration=iteration)
+        
         _end_training = False
         self.callbacks.on_before_dataloading(iteration)
         accumulated_loss = 0.0

@@ -205,7 +205,8 @@ class ARBaseGenerationPipeline(BaseWorldGenerationPipeline):
         # Create inference config
         model_size = detect_model_size_from_ckpt_path(checkpoint_name)
         model_ckpt_path = os.path.join(checkpoint_dir, checkpoint_name, "model.pt")
-        tokenizer_ckpt_path = os.path.join(checkpoint_dir, "Cosmos-Tokenize1-DV8x16x16-720p/ema.jit")
+        # tokenizer_ckpt_path = os.path.join(checkpoint_dir, "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-DV8x16x16-720p/ema.jit")
+        tokenizer_ckpt_path = "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-DV8x16x16-720p/ema.jit"
 
         inference_config: InferenceConfig = create_inference_config(
             model_ckpt_path=model_ckpt_path,
@@ -220,11 +221,13 @@ class ARBaseGenerationPipeline(BaseWorldGenerationPipeline):
         self.disable_diffusion_decoder = disable_diffusion_decoder
 
         if not disable_diffusion_decoder:
-            self.diffusion_decoder_ckpt_path = os.path.join(
-                checkpoint_dir, "Cosmos-Predict1-7B-Decoder-DV8x16x16ToCV8x8x8-720p/model.pt"
-            )
+            # self.diffusion_decoder_ckpt_path = os.path.join(
+            #     checkpoint_dir, "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Predict1-7B-Decoder-DV8x16x16ToCV8x8x8-720p/model.pt"
+            # )
+            self.diffusion_decoder_ckpt_path = "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Predict1-7B-Decoder-DV8x16x16ToCV8x8x8-720p/model.pt"
             self.diffusion_decoder_config = "DD_FT_7Bv1_003_002_tokenizer888_spatch2_discrete_cond_on_token"
-            self.diffusion_decoder_tokenizer_path = os.path.join(checkpoint_dir, "Cosmos-Tokenize1-CV8x8x8-720p")
+            # self.diffusion_decoder_tokenizer_path = os.path.join(checkpoint_dir, "Cosmos-Tokenize1-CV8x8x8-720p")
+            self.diffusion_decoder_tokenizer_path = "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-CV8x8x8-720p/"
             self.dd_sampling_config = DiffusionDecoderSamplingConfig()
             aux_vars_path = os.path.join(os.path.dirname(self.diffusion_decoder_ckpt_path), "aux_vars.pt")
             # We use a generic prompt when no text prompts are available for diffusion decoder.

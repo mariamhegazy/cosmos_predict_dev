@@ -16,8 +16,9 @@
 from megatron.core import parallel_state
 from torch.utils.data import DataLoader, DistributedSampler
 
-from cosmos_predict1.autoregressive.configs.base.dataset import VideoDatasetConfig
+from cosmos_predict1.autoregressive.configs.base.dataset import VideoDatasetConfig, H5DatasetConfig
 from cosmos_predict1.autoregressive.datasets.video_dataset import VideoDataset
+from cosmos_predict1.autoregressive.datasets.h5_dataset import H5Dataset
 from cosmos_predict1.utils import log
 from cosmos_predict1.utils.lazy_config import LazyCall as L
 
@@ -67,4 +68,30 @@ def get_tealrobot_video(
         sampler=L(get_sampler)(dataset=dataset),
         batch_size=batch_size,
         drop_last=True,
+    )
+
+@dataloader_register("driving_videos")
+def get_driving_videos(
+    batch_size: int = 1,
+    dataset_dir: str = "/capstor/store/cscs/swissai/a03/datasets/OpenDV-YouTube/h5/",
+    sequence_interval: int = 1,
+    num_frames: int = 33,
+    video_size: list[int, int] = [640, 848],
+    start_frame_interval: int = 1,
+):
+    dataset = L(H5Dataset)(
+        config=H5DatasetConfig(
+            dataset_dir=dataset_dir,
+            sequence_interval=sequence_interval,
+            num_frames=num_frames,
+            video_size=video_size,
+            start_frame_interval=start_frame_interval,
+        )
+    )
+    return L(DataLoader)(
+        dataset=dataset,
+        sampler=L(get_sampler)(dataset=dataset),
+        batch_size=batch_size,
+        drop_last=True,
+        num_workers=32,
     )

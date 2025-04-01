@@ -159,7 +159,8 @@ class DiffusionText2WorldGenerationPipeline(BaseWorldGenerationPipeline):
         load_network_model(self.model, f"{self.checkpoint_dir}/{self.checkpoint_name}/model.pt")
 
     def _load_tokenizer(self):
-        load_tokenizer_model(self.model, f"{self.checkpoint_dir}/Cosmos-Tokenize1-CV8x8x8-720p")
+        # load_tokenizer_model(self.model, f"{self.checkpoint_dir}/Cosmos-Tokenize1-CV8x8x8-720p")
+        load_tokenizer_model(self.model, "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-CV8x8x8-720p")")
 
     def _offload_prompt_upsampler_model(self):
         """Move prompt enhancement model to CPU/disk.

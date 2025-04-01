@@ -162,7 +162,7 @@ class Dataset(Dataset):
             # t5_embedding = np.load(sample["t5_embedding_path"])[0]
             with open(sample["t5_embedding_path"], "rb") as f:
                 t5_embedding = pickle.load(f)[0]
-
+            print(f"t5_embedding shape: {t5_embedding.shape}")
             data["t5_text_embeddings"] = torch.from_numpy(t5_embedding).cuda()
             data["t5_text_mask"] = torch.ones(512, dtype=torch.int64).cuda()
             data["fps"] = fps
@@ -185,7 +185,7 @@ class Dataset(Dataset):
 
 if __name__ == "__main__":
     dataset = Dataset(
-        dataset_dir="assets/example_training_data/",
+        dataset_dir="datasets/hdvila",
         sequence_interval=1,
         num_frames=57,
         video_size=[240, 360],

@@ -83,7 +83,7 @@ def register_tokenizer(cs):
         node=get_cosmos_video_tokenizer_comp8x8x8(
             resolution="720",
             chunk_duration=121,
-            checkpoint_path="checkpoints/Cosmos-Tokenize1-CV8x8x8-720p/.jit",
+            checkpoint_path="/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-CV8x8x8-720p/.jit",
         ),
     )
 
@@ -96,7 +96,7 @@ def register_corruptor(cs):
         node=get_cosmos_video_discrete_tokenizer_comp8x16x16(
             resolution="720",
             chunk_duration=49,
-            checkpoint_path="checkpoints/Cosmos-Tokenize1-DV8x16x16-720p/.jit",
+            checkpoint_path="/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-DV8x16x16-720p/.jit",
         ),
     )
 

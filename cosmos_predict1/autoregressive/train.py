@@ -12,6 +12,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# import os
+# print("Distributed env in script:")
+# print(f"  RANK={os.environ.get('RANK')}")
+# print(f"  WORLD_SIZE={os.environ.get('WORLD_SIZE')}")
+# print(f"  LOCAL_RANK={os.environ.get('LOCAL_RANK')}")
+# print(f"  MASTER_ADDR={os.environ.get('MASTER_ADDR')}")
+# print(f"  MASTER_PORT={os.environ.get('MASTER_PORT')}")
 
 import argparse
 import importlib
