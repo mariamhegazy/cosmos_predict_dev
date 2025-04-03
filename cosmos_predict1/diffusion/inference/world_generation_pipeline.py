@@ -160,7 +160,7 @@ class DiffusionText2WorldGenerationPipeline(BaseWorldGenerationPipeline):
 
     def _load_tokenizer(self):
         # load_tokenizer_model(self.model, f"{self.checkpoint_dir}/Cosmos-Tokenize1-CV8x8x8-720p")
-        load_tokenizer_model(self.model, "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-CV8x8x8-720p")")
+        load_tokenizer_model(self.model, "/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Tokenize1-CV8x8x8-720p")
 
     def _offload_prompt_upsampler_model(self):
         """Move prompt enhancement model to CPU/disk.
@@ -505,6 +505,8 @@ class DiffusionVideo2WorldGenerationPipeline(DiffusionText2WorldGenerationPipeli
             if offloading is enabled.
         """
         # Get video batch and state shape
+        # emedding = torch.zeros((1,512, 1024), dtype=torch.float32) ###cancels the prompt
+        # print("embedding shape: ", embedding.shape)
         data_batch, state_shape = get_video_batch(
             model=self.model,
             prompt_embedding=embedding,
@@ -647,6 +649,12 @@ class DiffusionVideo2WorldGenerationPipeline(DiffusionText2WorldGenerationPipeli
         prompt_embedding = prompt_embeddings[0]
         negative_prompt_embedding = prompt_embeddings[1] if negative_prompt else None
         log.info("Finish text embedding on prompt")
+
+        # print("prompt_embedding shape: ", prompt_embedding.shape)
+        # print("negative_prompt_embedding shape: ", negative_prompt_embedding.shape)
+
+        # prompt_embedding = torch.zeros((1,512, 1024), dtype=torch.float32) ###cancels the prompt
+        # negative_prompt_embedding = torch.zeros((1,512, 1024), dtype=torch.float32) ###cancels the prompt
 
         # Generate video
         log.info("Run generation")

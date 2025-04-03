@@ -607,6 +607,8 @@ class AutoRegressiveModel(torch.nn.Module):
 
         # Process image features
         images = images.to(device=text_features.device, dtype=text_features.dtype)
+        if images.ndim > 4:
+            images = images.squeeze(0)
         vit_outputs = self.vision_encoder(images)
         image_features = self.mm_projector(vit_outputs)
 

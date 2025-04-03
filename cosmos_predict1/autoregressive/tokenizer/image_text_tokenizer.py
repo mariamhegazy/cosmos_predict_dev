@@ -187,7 +187,7 @@ class ImageTextTokenizer(TextTokenizer):
             replace_strings = []
             # Calculate the number of tokens needed for each image and create a placeholder
             for image_size in image_sizes:
-                height, width = image_size
+                height, width = image_size[0]
                 num_height_tokens = height // self.patch_size
                 num_width_tokens = width // self.patch_size
                 replace_tokens = [[self.image_token] * num_width_tokens + [self.image_break_token]] * num_height_tokens
