@@ -51,7 +51,7 @@ example_video_dataset = L(Dataset)(
     video_size=(720, 1280),
     start_frame_interval=1,
 )
-
+#driving_h5_dataset
 driving_h5_dataset = L(h5Dataset)(
     dataset_dir="/capstor/store/cscs/swissai/a03/datasets/OpenDV-YouTube/h5",
     sequence_interval=1,
@@ -97,7 +97,7 @@ video2world_7b_example_hdvila = LazyDict(
             eps=1e-10,
         ),
         checkpoint=dict(
-            save_iter=200,
+            save_iter=2,
             # save_iter=1,
             broadcast_via_filesystem=False,
             load_path="checkpoints/Cosmos-Predict1-7B-Video2World/model.pt",
@@ -109,7 +109,7 @@ video2world_7b_example_hdvila = LazyDict(
             max_iter=2000,
             # max_iter=2,
             distributed_parallelism="fsdp",
-            logging_iter=200,
+            logging_iter=2,
             callbacks=dict(
                 grad_clip=L(GradClip)(
                     model_key="model",
@@ -205,17 +205,17 @@ video2world_7b_driving = LazyDict(
             name="video2world_7b_driving",
         ),
         optimizer=dict(
-            # lr=2 ** (-14.3),  # 2**(-14.3) approx 5e-5
-            lr=0.0,
+            lr=2 ** (-14.3),  # 2**(-14.3) approx 5e-5
+
             weight_decay=0.1,
             betas=[0.9, 0.99],
             eps=1e-10,
         ),
         checkpoint=dict(
-            save_iter=1000,
+            save_iter=2, ################################################ to be updated
             # save_iter=1,
             broadcast_via_filesystem=False,
-            load_path="/capstor/store/cscs/swissai/a03/mariam/cosmos_ckpts/Cosmos-Predict1-7B-Video2World/model.pt",
+            load_path="/capstor/scratch/cscs/yhaghigh/cosmos_predict_dev/checkpoints/Cosmos-Predict1-7B-Video2World/model.pt",
             load_training_state=False,
             strict_resume=False,
             keys_not_to_resume=[],
@@ -224,7 +224,7 @@ video2world_7b_driving = LazyDict(
             max_iter=10000000,
             # max_iter=2,
             distributed_parallelism="fsdp",
-            logging_iter=1000,
+            logging_iter=2, ################################################ to be updated
             callbacks=dict(
                 grad_clip=L(GradClip)(
                     model_key="model",
@@ -251,6 +251,7 @@ video2world_7b_driving = LazyDict(
                 160,
             ],
             loss_reduce="mean",
+            loss_add_logvar=True, ################## this is with uncertainty in the loss term, set to false to remove uncertainty 
             ema=dict(
                 enabled=True,
             ),
@@ -270,15 +271,16 @@ video2world_7b_driving = LazyDict(
             ),
             adjust_video_noise=True,
             # context_parallel_size=8,
-            context_parallel_size=1,  # check if this is correct
+            # context_parallel_size=1,  # check if this is correct 
             conditioner=dict(
+                text=dict(dropout_rate=1.0), ################## drops all the text 
                 video_cond_bool=dict(
                     condition_location="first_random_n",
                     cfg_unconditional_type="zero_condition_region_condition_mask",
                     apply_corruption_to_condition_region="noise_with_sigma",
                     condition_on_augment_sigma=False,
                     dropout_rate=0.0,  # No dropout
-                    first_random_n_num_condition_t_max=2,
+                    first_random_n_num_condition_t_max=15, ################# maximum number of frames for conditioning
                     normalize_condition_latent=False,
                     # Let the augment sigma mostly fall in the range of 0 to 0.3
                     augment_sigma_sample_p_mean=-3.0,

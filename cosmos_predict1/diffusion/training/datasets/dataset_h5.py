@@ -135,16 +135,19 @@ class h5Dataset(Dataset):
                 frame_ids = [start_frame + i * self.sequence_interval for i in range(self.sequence_length)]
                 selected_frames = f["video"][frame_ids]
            
-            assert total_frames >= self.sequence_length * self.sequence_interval, "Not enough frames"
-            frames = torch.from_numpy(selected_frames)
+            assert total_frames >= (self.sequence_length * self.sequence_interval), "Not enough frames"
+            frames = torch.from_numpy(selected_frames.astype(np.uint8))
             if frames.ndim == 4 and frames.shape[-1] == 3:  # [T, H, W, C] → [T, C, H, W]
                 frames = frames.permute(3, 0, 1, 2)
+
+            frames = self.preprocess(frames)
+            frames = torch.clamp(frames * 255.0, 0, 255).to(torch.uint8)
             data = dict()
 
             # video, fps = self._get_frames(video_path, frame_ids)
             # video = video.permute(1, 0, 2, 3)  # Rearrange from [T, C, H, W] to [C, T, H, W]
             data["video"] = frames
-            print(f"video shape: {data['video'].shape}")
+            #print(f"video shape: {data['video'].shape}")
             data["video_name"] = {
                 "video_path": video_path,
                 "t5_embedding_path": "nothing",
@@ -155,13 +158,13 @@ class h5Dataset(Dataset):
             # t5_embedding = np.load(sample["t5_embedding_path"])[0]
             # with open(sample["t5_embedding_path"], "rb") as f:
             #     t5_embedding = pickle.load(f)[0]
-            dummy_t5_embedding = np.zeros((15, 1024), dtype=np.float32)
+            dummy_t5_embedding = np.zeros((16, 1024), dtype=np.float32)
             data["t5_text_embeddings"] = torch.from_numpy(dummy_t5_embedding).cuda()
             data["t5_text_mask"] = torch.ones(512, dtype=torch.int64).cuda()
             data["fps"] = 10  # TO-DO: change this to dynamically get the correct fps for different datasets.
             data["image_size"] = torch.tensor([704, 1280, 704, 1280]).cuda()
             data["num_frames"] = self.sequence_length
-            data["padding_mask"] = torch.zeros(1, 704, 1280).cuda()
+            data["padding_mask"] = torch.zeros((1, 704, 1280)).cuda()
 
             return data
         except Exception:
