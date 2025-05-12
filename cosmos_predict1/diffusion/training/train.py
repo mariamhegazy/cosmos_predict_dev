@@ -28,6 +28,8 @@ from cosmos_predict1.utils.lazy_config import instantiate
 from cosmos_predict1.utils.lazy_config.lazy import LazyConfig
 from cosmos_predict1.utils.parallel_state_helper import is_tp_cp_pp_rank0
 
+backend = os.environ.get("DIST_BACKEND", "gloo") 
+dist.init_process_group(backend=backend, init_method="env://")
 
 @misc.timer("instantiate model")
 def instantiate_model(config: Config, trainer) -> None:
